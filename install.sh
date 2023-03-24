@@ -13,5 +13,7 @@ mv -f /root/Nethogs-Json-main /root/nethogs
 
 cd /root/nethogs/
 
-make install
+sudo make install
+hash -r
+
 
