@@ -2,7 +2,7 @@
 #By Hamed Ap
 apt update -y
 apt upgrade -y
-apt install make
+apt-get install build-essential libncurses5-dev libpcap-dev make
 
 sudo wget -O /root/nethogs.zip https://github.com/HamedAp/Nethogs-Json/archive/refs/heads/main.zip
 
