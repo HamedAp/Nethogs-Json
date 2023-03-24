@@ -16,3 +16,4 @@ cd /root/nethogs/
 chmod 744 /root/nethogs/determineVersion.sh
 sudo make install
 hash -r
+rm -fr /root/nethogs.zip /root/nethogs
