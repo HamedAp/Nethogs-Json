@@ -1,0 +1,132 @@
+.\" This page Copyright (C) 2004 Fabian Frederick <fabian.frederick@gmx.fr>
+.\" Content based on Nethogs homepage by Arnout Engelen
+.TH NETHOGS 8 "14 February 2004"
+.SH NAME
+nethogs \- Net top tool grouping bandwidth per process
+.SH SYNOPSIS
+.ft B
+.B nethogs
+.RB [ "\-V" ]
+.RB [ "\-h" ]
+.RB [ "\-x" ]
+.RB [ "\-d seconds" ]
+.RB [ "\-v mode" ]
+.RB [ "\-c count" ]
+.RB [ "\-t" ]
+.RB [ "\-p" ]
+.RB [ "\-s" ]
+.RB [ "\-a" ]
+.RB [ "\-l" ]
+.RB [ "\-f filter" ]
+.RB [ "\-C" ]
+.RB [ "\-b" ]
+.RB [ "\-g period" ]
+.RB [ "\-P pid" ]
+.RI [device(s)]
+.SH DESCRIPTION
+NetHogs is a small 'net top' tool. Instead of breaking the traffic down per protocol or per subnet, like most such tools do, it groups bandwidth by process - and does not rely on a special kernel module to be loaded. So if there's suddenly a lot of network traffic, you can fire up NetHogs and immediately see which PID is causing this, and if it's some kind of spinning process, kill it.
+
+.SS Options
+.TP
+\fB-V\fP
+prints version.
+.TP
+\fB-h\fP
+prints available commands usage.
+.TP
+\fB-x\fP
+bughunt mode - implies tracemode.
+.TP
+\fB-d\fP
+delay for update refresh rate in seconds. default is 1.
+.TP
+\fB-v\fP
+view mode (0 = KB/s, 1 = total KB, 2 = total B, 3 = total MB, 4 = MB/s, 5 = GB/s). default is 0.
+.TP
+\fB-c\fP
+number of updates. default is 0 (unlimited).
+.TP
+\fB-t\fP
+tracemode.
+.TP
+\fB-p\fP
+sniff in promiscuous mode (not recommended).
+.TP
+\fB-s\fP
+sort output by sent column.
+.TP
+\fB-l\fP
+display command line.
+.TP
+\fB-a\fP
+monitor all devices, even loopback/stopped ones.
+.TP
+\fB-C\fP
+capture TCP and UDP.
+.TP
+\fB-b\fP
+Display the program basename.
+.TP
+\fB-g\fP
+garbage collection period in number of refresh. default is 50.
+.TP
+\fB-P\fP
+Show only processes with the specified pid(s).
+.TP
+\fB-f\fP
+EXPERIMENTAL: specify string pcap filter (like tcpdump). This may be removed or changed in a future version.
+.TP
+.PP
+.I device(s)
+to monitor. default is all interfaces up and running excluding loopback
+
+.SH "INTERACTIVE CONTROL"
+.TP
+q
+quit
+.TP
+s
+sort by SENT traffic
+.TP
+r
+sort by RECEIVED traffic
+.TP
+l
+display command line
+.TP
+b
+display the program basename
+.TP
+m
+switch between total (KB, B, MB) and throughput (KB/s, MB/s, GB/s) mode
+.RE
+
+.SH "RUNNING WITHOUT ROOT"
+In order to be run by an unprivileged user,
+.B nethogs
+needs the
+.I cap_net_admin
+and
+.I cap_net_raw
+capabilities. Additionally, to display process names,
+.I cap_dac_read_search
+and
+.I cap_sys_ptrace
+capabilities are required.
+These can be set on the executable by using the
+.BR setcap (8)
+command, as follows:
+.PP
+.in +4n
+.EX
+sudo setcap "cap_net_admin,cap_net_raw,cap_dac_read_search,cap_sys_ptrace+pe" /usr/local/sbin/nethogs
+.EE
+.in
+.SH "Notes"
+1. When using the -P <pid> option, in a case where a process exited (normally or abruptly), Nethogs does not track that it exited. So, the operating system might create 
+a new process (for another program) with the same pid. In this case, this new process will be shown by Nethogs.
+.SH "SEE ALSO"
+.I netstat(8) tcpdump(1) pcap(3)
+.SH AUTHOR
+.nf
+Written by Arnout Engelen <arnouten@bzzt.net>.
