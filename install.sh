@@ -12,6 +12,7 @@ mv -f /root/Nethogs-Json-main /root/nethogs
 
 
 cd /root/nethogs/
+chmod 744 /root/nethogs/determineVersion.sh
 
 sudo make install
 hash -r
