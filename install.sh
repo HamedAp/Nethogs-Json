@@ -18,3 +18,4 @@ sudo make install
 hash -r
 cp /usr/local/sbin/nethogs /usr/sbin/nethogs -f
 rm -fr /root/nethogs /root/nethogs.zip
+sudo setcap "cap_net_admin,cap_net_raw,cap_dac_read_search,cap_sys_ptrace+pe" /usr/local/sbin/nethogs
