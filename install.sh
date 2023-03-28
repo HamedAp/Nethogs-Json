@@ -3,7 +3,6 @@
 
 if command -v apt-get >/dev/null; then
 apt update -y
-apt upgrade -y
 apt-get install build-essential libncurses5-dev libpcap-dev make zip unzip wget -y
 elif command -v yum >/dev/null; then
 yum update -y
