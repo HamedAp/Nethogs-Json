@@ -11,10 +11,10 @@ fi
 sudo wget -O /root/nethogs.zip https://github.com/HamedAp/Nethogs-Json/archive/refs/heads/main.zip
 sudo unzip /root/nethogs.zip
 sudo mv -f /root/Nethogs-Json-main /root/nethogs
-sudo cd /root/nethogs/
+cd /root/nethogs/
 sudo chmod 744 /root/nethogs/determineVersion.sh
 sudo make install
-sudo hash -r
+hash -r
 sudo cp /usr/local/sbin/nethogs /usr/sbin/nethogs -f
 sudo rm -fr /root/nethogs /root/nethogs.zip
 sudo setcap "cap_net_admin,cap_net_raw,cap_dac_read_search,cap_sys_ptrace+pe" /usr/local/sbin/nethogs
