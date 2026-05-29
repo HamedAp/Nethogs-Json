@@ -68,7 +68,7 @@ const char *COLUMN_FORMAT_RECEIVED = "%11.3f";
 
 // All descriptions are padded to 6 characters in length with spaces
 const char *const desc_view_mode[VIEWMODE_COUNT] = {
-    "KB/s  ", "KB    ", "B     ", "MB    ", "MB/s  ", "GB/s  "};
+    "kB/s  ", "kB    ", "bytes ", "MB    ", "MB/s  ", "GB/s  "};
 
 constexpr char FILE_SEPARATOR = '/';
 
@@ -234,10 +234,10 @@ void Line::log() {
 }
 
 void Line::log_json() {
-  printf("{\"name\":\"%s\",\"PID\":%d,\"UID\":%d,\"RX\":%f,\"TX\":%f }",
-  m_name, m_pid, m_uid, recv_value, sent_value);
-  }
-  
+  printf("{\"name\":\"%s\",\"PID\":%d,\"UID\":%d,\"RX\":%f,\"TX\":%f }", m_name,
+         m_pid, m_uid, recv_value, sent_value);
+}
+
 int get_devlen(Line *lines[], int nproc, int rows) {
   int devlen = MIN_COLUMN_WIDTH_DEV;
   int curlen;
@@ -245,7 +245,7 @@ int get_devlen(Line *lines[], int nproc, int rows) {
     if (i + 3 < rows) {
       curlen = strlen(lines[i]->devicename);
       if (curlen > devlen)
-        curlen = devlen;
+        devlen = curlen;
     }
   }
 
@@ -354,7 +354,8 @@ void show_json_trace(Line *lines[], int nproc) {
   for (int i = 0; i < nproc; i++) {
     lines[i]->log_json();
     delete lines[i];
-    if (i != nproc - 1) std::cout << ',';
+    if (i != nproc - 1)
+      std::cout << ',';
   }
   std::cout << ']' << std::endl;
 }

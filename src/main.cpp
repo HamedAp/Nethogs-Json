@@ -2,6 +2,8 @@
 #include <fcntl.h>
 #include <set>
 #include <vector>
+#include <list>
+#include <time.h>
 
 #ifdef __linux__
 #include <linux/capability.h>
@@ -37,8 +39,8 @@ static void help(bool iserror) {
   output << "		-x : bughunt mode - implies tracemode.\n";
   output << "		-d : delay for update refresh rate in seconds. default "
             "is 1.\n";
-  output << "		-v : view mode (0 = KB/s, 1 = total KB, 2 = total B, 3 "
-            "= total MB, 4 = MB/s, 5 = GB/s). default is 0.\n";
+  output << "		-v : view mode (0 = kB/s, 1 = total kB, 2 = "
+            "total bytes, 3 = total MB, 4 = MB/s, 5 = GB/s). default is 0.\n";
   output << "		-c : number of updates. default is 0 (unlimited).\n";
   output << "		-t : tracemode.\n";
   output << "		-j : tracemode with data as newline-delimited json.\n";
@@ -67,8 +69,8 @@ static void help(bool iserror) {
   output << " r: sort by RECEIVED traffic\n";
   output << " l: display command line\n";
   output << " b: display the program basename instead of the fullpath\n";
-  output << " m: switch between total (KB, B, MB) and throughput (KB/s, MB/s, "
-            "GB/s) mode\n";
+  output << " m: switch between total (kB, bytes, MB) and throughput (kB/s, "
+            " MB/s, GB/s) mode\n";
 }
 
 void quit_cb(int /* i */) {
@@ -165,7 +167,7 @@ int main(int argc, char **argv) {
       bughuntmode = true;
       tracemode = true;
       break;
-	case 'j':
+    case 'j':
       jsontrace = true;
       tracemode = true;
       break;
@@ -241,7 +243,7 @@ int main(int argc, char **argv) {
   int nb_devices = 0;
   int nb_failed_devices = 0;
 
-  handle *handles = NULL;
+  std::list<handle> handles;
   device *current_dev = devices;
   while (current_dev != NULL) {
     ++nb_devices;
@@ -267,7 +269,7 @@ int main(int argc, char **argv) {
       if (dp_setnonblock(newhandle, 1, errbuf) == -1) {
         fprintf(stderr, "Error putting libpcap in nonblocking mode\n");
       }
-      handles = new handle(newhandle, current_dev->name, handles);
+      handles.push_front(handle(newhandle, current_dev->name));
 
       if (pc_loop_use_select) {
         // some devices may not support pcap_get_selectable_fd
@@ -313,8 +315,7 @@ int main(int argc, char **argv) {
   while (1) {
     bool packets_read = false;
 
-    for (handle *current_handle = handles; current_handle != NULL;
-         current_handle = current_handle->next) {
+    for (auto current_handle = handles.begin(); current_handle != handles.end(); current_handle ++) {
       userdata->device = current_handle->devicename;
       userdata->sa_family = AF_UNSPEC;
       int retval = dp_dispatch(current_handle->content, -1, (u_char *)userdata,
