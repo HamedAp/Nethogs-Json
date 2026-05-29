@@ -1,77 +1,57 @@
 #!/bin/bash
 # =============================================
-# Nethogs-Json Installer Script
+# Nethogs-Json Installer - Steps Only
 # Author: Hamed Ap
 # =============================================
 
-set -e  # Exit on error
+set -e
 
-echo "🚀 Starting Nethogs-Json installation..."
+echo "🚀 Starting Nethogs-Json Installation"
 
-# ====================== Package Manager Detection ======================
+# Step 1
+echo "Step 1: Installing dependencies..."
 if command -v apt-get >/dev/null 2>&1; then
-    echo "📦 Detected Debian/Ubuntu-based system"
-
-    sudo apt update -y
-
-    # Detect Ubuntu version
+    sudo apt update -y >/dev/null 2>&1
     if [ -f /etc/os-release ]; then
         . /etc/os-release
         UBUNTU_VERSION=$(echo "$VERSION_ID" | cut -d. -f1)
-        echo "📌 Detected distribution: $ID $VERSION_ID"
-    else
-        UBUNTU_VERSION="unknown"
-        echo "⚠️  Could not detect Ubuntu version"
     fi
-
-    # Install dependencies based on Ubuntu version
     if [[ "$ID" == "ubuntu" && "$UBUNTU_VERSION" == "24" ]]; then
-        echo "🛠 Installing packages for Ubuntu 24.04..."
-        sudo apt install -y build-essential libncurses-dev libpcap-dev make zip unzip wget
+        sudo apt install -y build-essential libncurses-dev libpcap-dev make zip unzip wget >/dev/null 2>&1
     else
-        echo "🛠 Installing packages for older Ubuntu/Debian..."
-        sudo apt install -y build-essential libncurses5-dev libpcap-dev make zip unzip wget
+        sudo apt install -y build-essential libncurses5-dev libpcap-dev make zip unzip wget >/dev/null 2>&1
     fi
-
 elif command -v yum >/dev/null 2>&1; then
-    echo "📦 Detected RHEL/CentOS/Fedora-based system"
-    sudo yum update -y
-    sudo yum install -y gcc-c++ libpcap-devel libpcap ncurses-devel make zip unzip wget
-
+    sudo yum update -y >/dev/null 2>&1
+    sudo yum install -y gcc-c++ libpcap-devel libpcap ncurses-devel make zip unzip wget >/dev/null 2>&1
 else
-    echo "❌ Error: Unsupported package manager. Only apt and yum are supported."
+    echo "Error: Unsupported system"
     exit 1
 fi
 
-# ====================== Download and Install Nethogs-Json ======================
-echo "📥 Downloading Nethogs-Json..."
+# Step 2
+echo "Step 2: Downloading Nethogs-Json..."
+sudo wget -q -O /root/nethogs.zip https://github.com/HamedAp/Nethogs-Json/archive/refs/heads/main.zip
 
-sudo wget -q --show-progress -O /root/nethogs.zip \
-    https://github.com/HamedAp/Nethogs-Json/archive/refs/heads/main.zip
-
-echo "📂 Extracting files..."
+# Step 3
+echo "Step 3: Extracting files..."
 sudo unzip -q /root/nethogs.zip -d /root/
 sudo mv -f /root/Nethogs-Json-main /root/nethogs
 
+# Step 4
+echo "Step 4: Building and installing..."
 cd /root/nethogs/
-
-echo "🔧 Building and installing Nethogs..."
 sudo chmod 744 determineVersion.sh
-sudo make install
-
-# Refresh hash table
+sudo make install >/dev/null 2>&1
 hash -r
 
-# Copy to standard location
+# Step 5
+echo "Step 5: Copying binary and cleaning up..."
 sudo cp -f /usr/local/sbin/nethogs /usr/sbin/nethogs 2>/dev/null || true
-
-# Clean up
-echo "🧹 Cleaning up temporary files..."
 sudo rm -rf /root/nethogs /root/nethogs.zip
 
-# Set capabilities for non-root usage
-echo "🔐 Setting network capabilities..."
+# Step 6
+echo "Step 6: Setting capabilities..."
 sudo setcap "cap_net_admin,cap_net_raw,cap_dac_read_search,cap_sys_ptrace+ep" /usr/local/sbin/nethogs
 
 echo "✅ Installation completed successfully!"
-echo "💡 You can now run: sudo nethogs"
