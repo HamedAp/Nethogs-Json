@@ -12,7 +12,6 @@ extern "C" {
 #include <vector>
 #include <list>
 #include <sys/time.h>
-#include <sys/time.h>
 
 //////////////////////////////
 extern ProcList *processes;

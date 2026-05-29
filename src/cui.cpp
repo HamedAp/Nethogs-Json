@@ -232,6 +232,11 @@ void Line::log() {
   std::cout << '/' << m_pid << '/' << m_uid << "\t" << sent_value << "\t"
             << recv_value << std::endl;
 }
+void Line::log_json() {
+  printf("{\"name\":\"%s\",\"PID\":%d,\"UID\":%d,\"RX\":%f,\"TX\":%f }", m_name,
+         m_pid, m_uid, recv_value, sent_value);
+}
+
 
 int get_devlen(Line *lines[], int nproc, int rows) {
   int devlen = MIN_COLUMN_WIDTH_DEV;
@@ -342,6 +347,19 @@ void show_trace(Line *lines[], int nproc) {
     std::cout << "Unknown connection: " << (*it)->refpacket->gethashstring()
               << std::endl;
   }
+}
+
+
+void show_json_trace(Line *lines[], int nproc) {
+  /* print data */
+  std::cout << '[';
+  for (int i = 0; i < nproc; i++) {
+    lines[i]->log_json();
+    delete lines[i];
+    if (i != nproc - 1)
+      std::cout << ',';
+  }
+  std::cout << ']' << std::endl;
 }
 
 void show_ncurses(Line *lines[], int nproc) {

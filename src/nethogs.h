@@ -39,8 +39,6 @@
 #include <iostream>
 #include <cstdint>
 #include <stdlib.h>
-#include <cstdint>
-#include <stdlib.h>
 
 #define _BSD_SOURCE 1
 
