@@ -58,6 +58,7 @@ unsigned processlimit = 0;
 bool tracemode = false;
 bool bughuntmode = false;
 bool jsontrace = false;
+bool jsontrace = false;
 // sort on sent or received?
 bool sortRecv = true;
 bool showcommandline = false;
@@ -236,12 +237,3 @@ int process_ip6(u_char *userdata, const dp_header * /* header */,
   return false;
 }
 
-class handle {
-public:
-  handle(dp_handle *m_handle, const char *m_devicename = NULL) {
-    content = m_handle;
-    devicename = m_devicename;
-  }
-  dp_handle *content;
-  const char *devicename;
-};
