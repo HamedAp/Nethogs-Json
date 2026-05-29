@@ -1,6 +1,5 @@
 #!/bin/bash
 #By Hamed Ap
-
 if command -v apt-get >/dev/null; then
 sudo apt update -y
 sudo apt-get install build-essential libncurses5-dev libpcap-dev make zip unzip wget -y
