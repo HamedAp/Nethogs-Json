@@ -31,7 +31,6 @@
 extern bool tracemode;
 extern bool bughuntmode;
 extern bool jsontrace;
-extern bool jsontrace;
 
 void check_all_procs();
 

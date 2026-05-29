@@ -29,7 +29,7 @@ static void versiondisplay(void) { std::cout << version << "\n"; }
 static void help(bool iserror) {
   std::ostream &output = (iserror ? std::cerr : std::cout);
 
-  // output << "usage: nethogs [-V] [-j] [-b] [-d seconds] [-t] [-p] [-f (eth|ppp))]
+  // output << "usage: nethogs [-V] [-b] [-d seconds] [-t] [-p] [-f (eth|ppp))]
   // [device [device [device ...]]]\n";
   output << "usage: nethogs [-V] [-j] [-h] [-x] [-d seconds] [-v mode] [-c count] "
             "[-t] [-p] [-s] [-a] [-l] [-f filter] [-C] [-b] [-P pid] "

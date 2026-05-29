@@ -11,8 +11,6 @@ extern "C" {
 #include <memory>
 #include <vector>
 #include <list>
-#include <sys/time.h>
-#include <sys/time.h>
 
 //////////////////////////////
 extern ProcList *processes;
@@ -350,10 +348,10 @@ void nethogs_packet_stats(NethogsPackageStats **stats, int *stats_size)
 
   for(auto current_handle = handles.begin(); current_handle != handles.end(); current_handle ++){
     dp_stat stat = dp_stats(current_handle->content);
-    (*stats)[i].ps_recv = stat.ps_recv;
-    (*stats)[i].ps_drop = stat.ps_drop;
-    (*stats)[i].ps_ifdrop = stat.ps_ifdrop;
-    (*stats)[i].devicename = current_handle->devicename;
+    stats[i]->ps_recv = stat.ps_recv;
+    stats[i]->ps_drop = stat.ps_drop;
+    stats[i]->ps_ifdrop = stat.ps_ifdrop;
+    stats[i]->devicename = current_handle->devicename;
     i++;
   }
   *stats_size = handles.size();
