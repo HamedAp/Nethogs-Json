@@ -31,6 +31,7 @@
 extern bool tracemode;
 extern bool bughuntmode;
 extern bool jsontrace;
+
 void check_all_procs();
 
 /* compares Connection pointers by their refpacket */
@@ -77,6 +78,8 @@ public:
     uid = 0;
     sent_by_closed_bytes = 0;
     rcvd_by_closed_bytes = 0;
+    sent_last_reported = 0;
+    rcvd_last_reported = 0;
   }
   void check() { assert(pid >= 0); }
 
@@ -95,6 +98,7 @@ public:
   void gettotalmb(float *recvd, float *sent);
   void gettotalkb(float *recvd, float *sent);
   void gettotalb(float *recvd, float *sent);
+  void getlast(u_int64_t *recvd, u_int64_t *sent);
 
   char *name;
   char *cmdline;
@@ -102,6 +106,9 @@ public:
   int pid;
   u_int64_t sent_by_closed_bytes;
   u_int64_t rcvd_by_closed_bytes;
+
+  u_int64_t sent_last_reported;
+  u_int64_t rcvd_last_reported;
 
   ConnList connections;
   uid_t getUid() { return uid; }
