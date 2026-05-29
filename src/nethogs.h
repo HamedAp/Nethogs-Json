@@ -37,6 +37,10 @@
 #include <malloc.h>
 #endif
 #include <iostream>
+#include <cstdint>
+#include <stdlib.h>
+#include <cstdint>
+#include <stdlib.h>
 
 #define _BSD_SOURCE 1
 
@@ -111,4 +115,16 @@ void quit_cb(int i);
 
 const char *getVersion();
 
+
+#include "decpcap.h"
+
+class handle {
+public:
+  handle(dp_handle *m_handle, const char *m_devicename = NULL) {
+    content = m_handle;
+    devicename = m_devicename;
+  }
+  dp_handle *content;
+  const char *devicename;
+};
 #endif
