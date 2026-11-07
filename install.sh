@@ -11,7 +11,6 @@ echo "🚀 Starting Nethogs-Json Installation"
 # Step 1
 echo "Step 1: Installing dependencies..."
 if command -v apt-get >/dev/null 2>&1; then
-    sudo apt update -y >/dev/null 2>&1
     if [ -f /etc/os-release ]; then
         . /etc/os-release
         UBUNTU_VERSION=$(echo "$VERSION_ID" | cut -d. -f1)
